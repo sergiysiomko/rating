@@ -1,7 +1,8 @@
 const LocalStrategy = require('passport-local').Strategy
 const Users = require('../db/UsersSchema');
+const passport = require('passport');
 
-module.exports = function(passport){
+module.exports = (function(){
 
 
 
@@ -15,7 +16,7 @@ passport.deserializeUser(function (id, done) {
   })
 })
 passport.use('local-signup', new LocalStrategy({
-    // by default, local strategy uses username and password, we will override with email
+    // by default, local strategy uses username and password, we will override with login
     usernameField : 'login',
     passwordField : 'password',
     passReqToCallback : true // allows us to pass back the entire request to the callback
@@ -23,7 +24,7 @@ passport.use('local-signup', new LocalStrategy({
   function(req, login, password, done){
     process.nextTick(function() {
 
-      // find a user whose email is the same as the forms email
+      // find a user whose login is the same as the forms login
       // we are checking to see if the user trying to login already exists
       Users.findOne({ 'login' :  login }, function(err, user) {
           // if there are any errors, return the error
@@ -35,7 +36,7 @@ passport.use('local-signup', new LocalStrategy({
               return done(null, false);
           } else {
 
-              // if there is no user with that email
+              // if there is no user with that login
               // create the user
               var newUser = new Users();
 
@@ -57,12 +58,12 @@ passport.use('local-signup', new LocalStrategy({
   }
   ))
   passport.use('local-login', new LocalStrategy({
-    // by default, local strategy uses username and password, we will override with email
+    // by default, local strategy uses username and password, we will override with login
     usernameField : 'login',
     passwordField : 'password',
     passReqToCallback : true // allows us to pass back the entire request to the callback
 },
-function(req, login, password, done) { // callback with email and password from our form
+function(req, login, password, done) { // callback with login and password from our form
 
     // find a user whose login is the same as the forms login
     // we are checking to see if the user trying to login already exists
@@ -85,4 +86,15 @@ function(req, login, password, done) { // callback with email and password from 
     });
 
 }));
-}
+
+// route middleware to make sure a user is logged in
+passport.isLoggedIn = (req, res, next)=>{
+    // if user is authenticated in the session, carry on 
+    if (req.isAuthenticated())
+    return next();
+
+    // if they aren't redirect them to the home page
+    res.redirect('/users/login');
+  }
+  
+})()
