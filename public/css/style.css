@@ -1,8 +1,12 @@
 body {
-  padding: 50px;
+  background-color: #f8f8f8;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+
 }
 
 a {
   color: #00B7FF;
+}
+#form-login{
+  margin-top:20px;
 }
