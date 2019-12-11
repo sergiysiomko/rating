@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
+const SubjectSchema = require('./SubjectsSchema');
 
-const getConnection = ()=>{
+(() => {
+  getConnection();
+})()
+function getConnection(){
 //     0: disconnected
 //     1: connected
 //     2: connecting
@@ -21,4 +25,16 @@ const getConnection = ()=>{
  
 }
 
+const saveSubject = async (obj)=>{
+  try {
+    let subj = new SubjectSchema(obj);
+    
+    return [null,await subj.save()]
+  } catch (error) {
+    console.log(error);
+    return [error, null];
+  }
+}
+
 module.exports.getConnection = getConnection
+module.exports.saveSubject = saveSubject

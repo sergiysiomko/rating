@@ -2,12 +2,10 @@ const express = require('express');
 const router = express.Router();
 require('../authentication');
 const usersRouter = require('./users');
+const rootRouter = require('./root');
 
 
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
-
+router.use('/',rootRouter)
 router.use('/users',usersRouter)
 
 // catch 404 and forward to error handler
