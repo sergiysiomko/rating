@@ -1,7 +1,14 @@
 <%-include('parts/header')-%>
 
 
-<pre><%= msg %></pre>
+<% years.forEach(function(y) {%>
+    <p>
+        <h6><%=y.year%> РІК</h6>
+    <%y.semesters.forEach(function(s) {%>
+        <p>Семестер: <a href='/<%=y.year%>/<%=s%>'><%=s%></a></p>
+    <%});%>
+    </p>
+<% }); %>
 
 
 

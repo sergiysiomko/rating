@@ -1,9 +1,8 @@
 const fs = require('fs');
-let names = fs.readFileSync('E:/web/diploma/rating/modules/db/names.csv', 'utf-8')
-let lines = names.split(/\r?\n/);
+
 
 const getNames = () => {
-    let names = fs.readFileSync('E:/web/diploma/rating/modules/db/names.csv', 'utf-8')
+    let names = fs.readFileSync('E:/web/diploma/rating/modules/db/datagen/names.csv', 'utf-8')
     return names.split(/\r?\n/);
 }
 

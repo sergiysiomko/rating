@@ -1,0 +1,18 @@
+<%-include('parts/header')-%>
+
+
+<% faculties.forEach(function(f) {%>
+    <h5><%=f.faculty%></h5>
+    <ul>
+        <%f.specialities.forEach(s=>{ %>
+            <li>
+                <a href="/<%=href%>/<%=s.code%>"><%=s.codeStr%> | <%=s.name%></a>
+                </li>
+        <%})%>
+    </ul>
+<% }); %>
+
+
+
+
+<%-include('parts/footer')-%>

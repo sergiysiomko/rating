@@ -5,22 +5,22 @@ const StudentsSchema = require('./StudentsSchema');
 
 
 const SubjectsShema = new Schema({
-    subject_name:{
+    subject_name:{ //⭐
         type:String,
         required:true
     },
-    semester:{
+    semester:{ //⭐
         type:Number,
         required:true
     },
-    speciality:{
+    speciality:{ //⭐
         name:String,
         code:{
             type:Number,
             required:true
         }
     },
-    year:{
+    year:{ //⭐
         type:Number,
         required:true
     },
@@ -54,7 +54,7 @@ const SubjectsShema = new Schema({
         required:true
     },
     teacher:String,
-    faculty:String,
+    faculty:String, //⭐
     educational_level:String, // bachelor| magistr
     educational_form:String, // external | full
     budget_amount:{

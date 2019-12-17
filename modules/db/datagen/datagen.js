@@ -14,33 +14,44 @@ function NamesProvider(){
     }
 }
 (() => {
+    // TODO: refactor to method
     let yearStart = 2014
     let yearEnd = 2018
     let namesProvider = new NamesProvider()
     let streamCounter = 0
     inputData.FACULTIES.forEach((f) => {
         f.spec.forEach( (s) => {
-            for (let j = 0; j < 4; j++) {
-                
-                
+            for (let j = 0; j < yearEnd-yearStart; j++) {
                 // create stream fo every speciality
                 let stream = genStream(f.faculty,s,namesProvider)
                 let year = yearStart+j;
-                for (let i = 1; i < (yearEnd-yearStart)*2; i++) {
+                for (let i = 1; i < 8 && yearEnd-year > 0; i++) {
+                    // generate all list results for stream
+                
+                    //console.log(`year: ${year} | semester: ${i}`);     
+                    
                     let s = genSemester(stream, i, year)
+                    //console.log(s.length);
                     Subjects.insertMany(s)
                     year++;
-                    i++;
+                    i++; 
+                    // console.log(`year: ${year} | semester: ${i}`); 
+                    // console.log('____________________________');    
                     s = genSemester(stream,i, year)
+                    //console.log(s.length);
                     Subjects.insertMany(s)
                 }
                 streamCounter++;
             }
-            
+            console.log(s.code + ' streamCounter ', streamCounter);
+            console.log(f.faculty,' - ',s.name);
         })
+        console.log('----------------------------------------');
+        console.log('rate: ', namesProvider.rate());
      })
-     console.log(namesProvider.counter);
-     console.log(namesProvider.rate());
+     console.log('TOTAL');
+     console.log('names counter', namesProvider.counter);
+     console.log('rate: ',namesProvider.rate());
      console.log('streams: ', streamCounter);
 })()
 function genSemester(stream, semester, year){
@@ -48,11 +59,13 @@ function genSemester(stream, semester, year){
     let subjectRegisters = [];
     let {speciality, faculty} = stream[0];
     const subjectTypes = {1 :'credit', 2:'exam'}
-    let coff = getRandomInt(1,3);
-    const students_list = genStudentsRegisters(stream);
+    //let students_list = genStudentsRegisters(stream);
     let budget_amount = sumBudget(stream)
-    let teacher = inputData.TEACHER_NAMES[getRandomInt(0,inputData.TEACHER_NAMES.length)];
     subjectNames.forEach(subject_name => {
+        let teacher = inputData.TEACHER_NAMES[getRandomInt(0,inputData.TEACHER_NAMES.length)];
+        let coff = getRandomInt(1,3);
+        let students_list = genStudentsRegisters(stream);
+
         subjectRegisters.push({
             subject_name,
             semester,
@@ -129,23 +142,38 @@ function genRandomDisceplines(){
 function getRandomPoint(){
     let point = getRandomInt(50,101);
     let letter;
-    if(point<60){
+    if(point < 60){
         letter = 'E'
     }
-    else if(point<74){
+    else if(point < 74){
         letter = 'D'
     }
-    else if(point<82){
+    else if(point < 82){
         letter = 'C'
     }
-    else if(point<90){
+    else if(point < 90){
         letter = 'B'
     }
-    else if(point<=100){
+    else if(point <= 100){
         letter = 'A'
     }
     return [point,letter];
 }
+// function genStudentsRegisters(stream){
+//     let students = []
+    
+//     stream.forEach(g=>{
+//         g.students.forEach(s=>{
+            
+//             students.push({
+//                 student:s,
+//                 group:g.group_name
+//             })
+//         })
+        
+//     })
+//     return students;
+// }
 function genStudentsRegisters(stream){
     let students = []
     
@@ -171,3 +199,12 @@ function sumBudget(stream){
     }
     return sum;
 }
+// function genPoints(students) {
+//     return students.map(s => {
+//         let [point, letter] = getRandomPoint()
+//         s.point = 70;
+//         s.letter = letter;
+//         return s
+//     });
+
+// }
