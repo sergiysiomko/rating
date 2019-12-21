@@ -48,7 +48,10 @@ const SubjectsShema = new Schema({
         type:String,
         required:true // exam|credit
     },
-    description:String,
+    description:{
+        type:String,
+        default:''
+    },
     coefficient:{
         type:Number,
         required:true

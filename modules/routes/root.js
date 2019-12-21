@@ -7,7 +7,7 @@ const Comp = require('../computation');
 router.get('/', async (req, res, next) => {
     //require('../db/datagen/datagen');
     let years = await Subjects.aggregate([  
-         { "$group": {
+        { "$group": {
                 _id: {
                     
                     year: "$year"
@@ -17,17 +17,43 @@ router.get('/', async (req, res, next) => {
         },
         {
             '$sort':{ '_id.year':-1}
-         }
-
-     ])
-     // format data
-     years = years.map(y => {
-         return {
-             year: y._id.year,
-             semesters : y.semesters.sort((a,b)=>b-a)
-         }
-     })
+        }
+        
+    ])
+    // format data
+    years = years.map(y => {
+        return {
+            year: y._id.year,
+            semesters : y.semesters.sort((a,b)=>b-a)
+        }
+    })
     res.render('index',{years})
+})
+router.get('/student/:card', async (req, res) => {
+    const {card} =  req.params;
+    let registers = await Subjects.find({
+        'students_list.student.student_card':card
+    }).sort({semester:-1})
+    if(registers.length == 0){
+        let message = 'Студента не знайдено';
+        res.render('info', {message})
+        return;
+    }
+    let semesters = Comp.groupBySemester(registers)
+    semesters = semesters.map(s =>{
+        let res = Comp.calcRatingList(s);
+        res.student = res.list.find(l => l.student_card == card)
+        delete res.list
+        delete res.avg
+        delete res.budgetAmount
+        delete res.stipendAmount
+        delete res.freePlace
+        return res;
+    })
+    console.log(semesters);
+    res.send(semesters)
+    //res.render('student', obj)
+
 })
 router.get('/:year/:semester',async (req,res) => {
     
@@ -79,11 +105,10 @@ router.get('/:year/:semester/:code', async (req, res) => {
         'speciality.code':parseInt(req.params.code),
     })
     
-    Comp.calcRatingList(registers)
-    res.send('adfas')
+    res.render('rating_list', Comp.calcRatingList(registers,42))
 })
 router.get('/data',(req,res) => {
-    require('../db/datagen/datagen');
+    //require('../db/datagen/datagen');
     res.send('datagen')
 })
 

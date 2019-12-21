@@ -1,15 +1,15 @@
 <%-include('parts/header')-%>
 
-
+<div class="container">
 <% years.forEach(function(y) {%>
     <p>
-        <h6><%=y.year%> РІК</h6>
+        <h6 class='uderscore'><%=y.year%> РІК</h6>
     <%y.semesters.forEach(function(s) {%>
         <p>Семестер: <a href='/<%=y.year%>/<%=s%>'><%=s%></a></p>
     <%});%>
     </p>
 <% }); %>
-
+</div>
 
 
 

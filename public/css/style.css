@@ -10,3 +10,51 @@ a {
 #form-login{
   margin-top:20px;
 }
+.bad-point{
+  background-color: rgba(250,100,100,0.4);
+}
+.stipend{
+  background-color: rgba(142, 250, 100, 0.4);
+}
+.free-place{
+  background-color: rgba(250, 210, 100, 0.4);
+}
+.center-text{
+  text-align: center;
+}
+
+/* sorted table */
+th.sorded::after{
+  content:" ";
+}
+th.sorted[data-order="-1"]::after {
+content: "▼"
+}
+
+th.sorted[data-order="1"]::after {
+content: "▲"
+}
+th.sorted{
+  text-decoration: underline;
+}
+#table-rating tbody tr:hover{
+  background-color:rgb(194, 194, 194);
+}
+table .name{
+  font-weight: bolder;
+  min-width: 250px;
+  cursor: pointer;
+}
+table .name a{
+  color:rgb(0, 0, 0);
+  
+}
+table .name:hover a{
+  text-decoration: underline;
+}
+table .point{
+  max-width: 50px;
+}
+.uderscore{
+  text-decoration: underline;
+}

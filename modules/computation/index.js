@@ -1,99 +1,105 @@
-function calcRatingList(registers) {
+function calcRatingList(registers, precent = 42) {
     // calculate rating list
     
-    // {name, isBudget, isStipend, subj1, sub}
-    let ratingg = {
-        name:[],
-        student_card:[],
-        isBudget:[],
-        isStipend:[],//
-        avg:[],
-        points:[],
-        group:[],
-        subjects:registers.map(r=> r.subject_name)
-    }
     let rating = []
-    const subjects = registers.map(r=> r.subject_name)
-    let coffs = registers.map(r => r.coefficient)
+    const budgetAmount = registers[0].budget_amount;
+    
+    const stipendAmount = Math.ceil(budgetAmount * (precent/100));
+    
     let {students_list:studentsList} = registers[0];
 
-    for (let i = 0; i < studentsList.length; i++) {
-        const s = studentsList[i];
-        let r = {};
-
-        r.name = [s.student.name, s.student.middle_name, s.student.surname].join(' ')
-        r.student_card = s.student.student_card;
-        r.isBudget = s.student.budget;
-        r.group = s.group;
-        r.subjects = subjects;
-
-        let points = registers.map(reg => reg.students_list[i].point)
-        
-        // calculate rating point
-        let avg = 0, num = 0, den = 0;
-        for (let j = 0; j < points.length; j++) {
-            num += points[j] * coffs[j];
-            den += coffs[j] 
-        }
-        //avg = num/coff;
-        
-        r.points = points;
-        r.avg = num/den;
-
-        rating.push(r);
+    for (let i = 0; i < studentsList.length; i++) {   
+        rating.push(getRatingListItem(i, registers));
     };
     
-    rating.forEach(r => {
-        console.log(r.avg);
-    });console.log('-----------------');
-    rating = rating.sort((a,b) => a.avg - b.avg)
-    rating.forEach(r => {
-        console.log(r.avg);
-    });
-    console.log(rating);
+    // decrement sort
+    rating.sort((a, b) => b.avg - a.avg)//ShellSort(rating, (a, b)=> a.avg < b.avg)
+
+    let freePlace = stipendAmount;
+    // stipend computing
+    for (let i = 0; i < rating.length && freePlace > 0; i++) {
+        const r = rating[i];
+        let unclose =  r.points.some( p => p < 60)
+        r.isStipend = false;
+        if(r.isBudget && unclose===false){
+            r.isStipend = true;
+            freePlace--;
+        }
+    }    
+    const subjects = registers.map(r=> r.subject_name)
+    let groups = new Set(studentsList.map(s => s.group))
+    let avg = rating.reduce((acc, curr) => acc + curr.avg, 0) / rating.length; 
+    avg = Math.round(avg * 10) / 10;  
+
+    // round avg
+    for (let i = 0; i < rating.length; i++) {
+        rating[i].avg = Math.round(rating[i].avg * 10) / 10;  
+    }
+    // sort by budget
+   rating.sort((a, b) => b.isBudget - a.isBudget)
+    // sort by stipend
+   rating.sort((a, b) => b.isStipend - a.isStipend)
+    return {
+        list:rating, 
+        subjects, 
+        budgetAmount, 
+        stipendAmount, 
+        freePlace,
+        speciality:registers[0].speciality,
+        year:registers[0].year,
+        semester:registers[0].semester,
+        groups:[...groups],
+        avg
+        //teacher:registers[0].teacher
+    };
     
 }
 
-function ShellSort (arr) {
-    const l = arr.length;
-    let gap = Math.floor(l / 2);
-    while (gap >= 1) {
-        for (let i = gap; i < l; i++) {
-            const current = arr[i];
-            let j = i;
-            //console.log(arr[j - gap] === undefined);
-            if(arr[j - gap].avg === undefined){
-                console.log('afasfsfasdfasfasdfsfdsafd');
-            }
-            while (j > 0 && (arr[j - gap].avg > current.avg)) {
-                arr[j] = arr[j - gap];
-                j -= gap;
-            }
-            arr[j] = current;
-        }
-        gap = Math.floor(gap / 2);
+function getRatingListItem(index, registers){
+    let {students_list:studentsList} = registers[0];
+    let s = studentsList[index];
+    let item = {};
+    const coffs = registers.map(r => r.coefficient)
+    item.name = [s.student.name, s.student.middle_name, s.student.surname].join(' ')
+    item.student_card = s.student.student_card;
+    item.isBudget = s.student.budget;
+    item.group = s.group;
+
+    let points = registers.map(reg => reg.students_list[index].point)
+    
+    // calculate rating point
+    let  num = 0, den = 0;
+    for (let j = 0; j < points.length; j++) {
+        num += points[j] * coffs[j];
+        den += coffs[j] 
     }
-    return arr;
-};
+    
+    item.points = points;
+    item.avg = num/den;
 
-module.exports.calcRatingList = calcRatingList
+    return item;
+}
 
-
-/*
-rating.name.push([s.student.name, s.student.middle_name, s.student.surname].join(' '));     
-        rating.student_card.push(s.student.student_card);
-        rating.isBudget.push(s.student.budget)
-        rating.group.push(s.group)
-
-        let points = registers.map(r => r.students_list[i].point)
+function groupBySemester(registers){
+    // create arrat for every semester
+    let semesters = [[]];
+    let semester = registers[0].semester;
+    for (let i = 0, j = 0; i < registers.length; i++) {
         
-        let avg = 0, num = 0, den = 0;
-        for (let j = 0; j < points.length; j++) {
-            num += points[j] * coffs[j];
-            den += coffs[j] 
+        if(registers[i].semester == semester){
+            semesters[j].push(registers[i])
         }
-        //avg = num/coff;
+        else{
+            semester = registers[i].semester;
+            semesters.push([]);
+            j++;
+            semesters[j].push(registers[i])  
+              
+        }
         
-        rating.points.push(points)
-        rating.avg.push(num/den)
-*/
+    }
+    return semesters;
+}
+module.exports.calcRatingList = calcRatingList;
+module.exports.groupBySemester = groupBySemester;
+

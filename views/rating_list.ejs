@@ -1,0 +1,68 @@
+<%-include('parts/header')-%>
+<div class="container">
+<h2>Рейтинговий список спеціальності "<%=speciality.name%>"</h2>
+<h4>Групи: <%=groups.join(', ')%> - <%=semester%> семестр</h4>
+<table class='table_sort' id='table-rating'>
+    <thead>
+        <tr>
+            <th>
+               # 
+            </th>
+            <th>
+               Ім'я
+            </th>
+       
+            <th>
+               Середній бал 
+            </th>
+            <th>
+                Бюджет
+            </th>
+            <th>
+                Стипендія
+            </th>
+            <%subjects.forEach(s => {%>
+            <th>
+                <%=s%>
+            </th>
+            <%});%>
+            </tr>
+    </thead>
+    <tbody>
+        
+            <%for (let i = 0; i < list.length; i++) {%>
+                <% l = list[i]%>
+                <tr>
+                    <td> 
+                        <%=i+1%>    
+                    </td>
+                    <td class='name <%=i<stipendAmount-freePlace?"stipend":""%> '>
+                        <a href="/student/<%=l.student_card%>">
+                            <%=l.name%>    
+                        </a>
+                    </td>
+                    <td >
+                        <%=l.avg%>    
+                    </td>
+                    <td>
+                        <%=l.isBudget?'ТАК':'НІ'%>    
+                    </td>
+                    <td>
+                        <%=l.isStipend?'ТАК':'НІ'%>    
+                    </td>
+                    <%l.points.forEach( p => {%>
+                        <td class='center-text point <%=p<60?"bad-point":""%>'><%=p%></td>
+                    <%}) %>
+                </tr>
+            <%}%>
+        </tbody>
+</table>
+<h6>Кількість бюджетних місць: <%=budgetAmount%></h6>
+<h6>Кількість стипендіальнильних місць: <%=stipendAmount%></h6>
+<%if(freePlace > 0){%>
+    <h6>Кількість зайнятих стипендіальнильних місць: <%=stipendAmount-freePlace%></h6>
+    <h6>Кількість вільних стипендіальнильних місць: <%=freePlace%></h6>
+<%}%>
+<h6>Середнє арифметичне потоку: <%=avg%></h6>
+</div>
+<%-include('parts/footer')-%>
