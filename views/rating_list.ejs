@@ -1,6 +1,6 @@
 <%-include('parts/header')-%>
 <div class="container">
-<h2>Рейтинговий список спеціальності "<%=speciality.name%>"</h2>
+<h3>Рейтинговий список спеціальності "<%=speciality.name%>"</h3>
 <h4>Групи: <%=groups.join(', ')%> - <%=semester%> семестр</h4>
 <table class='table_sort' id='table-rating'>
     <thead>
@@ -20,6 +20,9 @@
             </th>
             <th>
                 Стипендія
+            </th>
+            <th>
+                Група
             </th>
             <%subjects.forEach(s => {%>
             <th>
@@ -49,6 +52,9 @@
                     </td>
                     <td>
                         <%=l.isStipend?'ТАК':'НІ'%>    
+                    </td>
+                    <td>
+                        <%=l.group%>    
                     </td>
                     <%l.points.forEach( p => {%>
                         <td class='center-text point <%=p<60?"bad-point":""%>'><%=p%></td>

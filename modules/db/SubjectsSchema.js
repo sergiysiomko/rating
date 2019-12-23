@@ -3,7 +3,6 @@ const Schema = mongoose.Schema;
 
 const StudentsSchema = require('./StudentsSchema');
 
-
 const SubjectsShema = new Schema({
     subject_name:{ //⭐
         type:String,

@@ -51,8 +51,8 @@ router.get('/student/:card', async (req, res) => {
         return res;
     })
     console.log(semesters);
-    res.send(semesters)
-    //res.render('student', obj)
+    //res.send({semesters})
+    res.render('student', {semesters})
 
 })
 router.get('/:year/:semester',async (req,res) => {

@@ -159,21 +159,7 @@ function getRandomPoint(){
     }
     return [point,letter];
 }
-// function genStudentsRegisters(stream){
-//     let students = []
-    
-//     stream.forEach(g=>{
-//         g.students.forEach(s=>{
-            
-//             students.push({
-//                 student:s,
-//                 group:g.group_name
-//             })
-//         })
-        
-//     })
-//     return students;
-// }
+
 function genStudentsRegisters(stream){
     let students = []
     
@@ -199,12 +185,3 @@ function sumBudget(stream){
     }
     return sum;
 }
-// function genPoints(students) {
-//     return students.map(s => {
-//         let [point, letter] = getRandomPoint()
-//         s.point = 70;
-//         s.letter = letter;
-//         return s
-//     });
-
-// }

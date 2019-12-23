@@ -1,66 +1,54 @@
 <%-include('parts/header')-%>
 <div class="container">
-<h2>Рейтинговий список спеціальності "<%=speciality.name%>"</h2>
-<h4>Групи: <%=groups.join(', ')%> - <%=semester%> семестр</h4>
-<table class='highlight table_sort'>
-    <thead>
-        <tr>
-            <th>
-               # 
-            </th>
-            <th>
-               Ім'я
-            </th>
-       
-            <th>
-               Середній бал 
-            </th>
-            <th>
-                Бюджет
-            </th>
-            <th>
-                Стипендія
-            </th>
-            <%subjects.forEach(s => {%>
-            <th>
-                <%=s%>
-            </th>
-            <%});%>
-            </tr>
-    </thead>
-    <tbody>
+
+
+<ul class="collection with-header">
+    <li class="collection-header">
+            
+        <h5><%=semesters[0].student.name%></h5>
+        <h6>Група: <%=semesters[0].student.group%></h6>
+        <h6>Спеціальність: <%=semesters[0].speciality.name%></h6>
+    </li>
+    <%semesters.forEach(function(s) {%>
         
-            <%for (let i = 0; i < list.length; i++) {%>
-                <% l = list[i]%>
-                <tr>
-                    <td> 
-                        <%=i+1%>    
-                    </td>
-                    <td class='name <%=i<stipendAmount-freePlace?"stipend":""%> '>
-                        <%=l.name%>    
-                    </td>
-                    <td >
-                        <%=l.avg%>    
-                    </td>
-                    <td>
-                        <%=l.isBudget?'ТАК':'НІ'%>    
-                    </td>
-                    <td>
-                        <%=l.isStipend?'ТАК':'НІ'%>    
-                    </td>
-                    <%l.points.forEach( p => {%>
-                        <td class='center-text point <%=p<60?"bad-point":""%>'><%=p%></td>
-                    <%}) %>
+        <li class="collection-item">
+            <u><h6>Семестр: <%=s.semester%>, рік <%=s.year%></h6></u>
+            <table class="table-student points">
+               <tr>
+                    <th>Предмет</th>
+                    <th>Отримана оцінка</th>
                 </tr>
-            <%}%>
-        </tbody>
-</table>
-<h6>Кількість бюджетних місць: <%=budgetAmount%></h6>
-<h6>Кількість стипендіальнильних місць: <%=stipendAmount%></h6>
-<%if(freePlace > 0){%>
-    <h6>Кількість зайнятих стипендіальнильних місць: <%=stipendAmount-freePlace%></h6>
-    <h6>Кількість вільних стипендіальнильних місць: <%=freePlace%></h6>
-<%}%>
-<h6>Середнє арифметичне потоку: <%=avg%></h6>
+                <%for (let i = 0; i < s.student.points.length; i++) {%>
+                    <tr>
+                        <td><%=s.subjects[i]%></td>
+                        <td class="point"><%=s.student.points[i]%></td>
+                    
+                    </tr>
+                    <%}%> 
+                </table>  
+                <table class="table-student info">
+                    <tr>
+                        <td>Середній бал</td>
+                        <td class="average"><%=s.student.avg%></td>
+                    </tr>
+                    <tr>
+                        <td>На бюджеті</td>
+                        <td><%=s.student.isBudget?'ТАК':'НІ'%></td>
+                    </tr> 
+                    <tr>
+                        <td>Стипендія</td>
+                        <td><%=s.student.isStipend?'ТАК':'НІ'%></td>
+                    </tr>        
+                </table>
+        </li>
+
+    <%})%>
+</ul>
+<div class="chart-container" style="position: relative; height:25vh; width:50vw">
+<canvas id="line-chart" width="250" height="200"></canvas>
 </div>
+</div>
+
+
+<script src="/js/chart.2.8.js"></script>
 <%-include('parts/footer')-%>

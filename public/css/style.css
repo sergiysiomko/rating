@@ -58,3 +58,17 @@ table .point{
 .uderscore{
   text-decoration: underline;
 }
+
+.table-student{
+  width:300px;
+}
+.table-student.info{
+  margin-top: 20px;
+}
+.collection h6{
+  display: inline;
+  width: max-content;
+}
+#line-chart{
+  width:200px;
+}

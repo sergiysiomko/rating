@@ -13,6 +13,10 @@ router.get('/file', (req, res) => {
     res.render('load_file');
 })
 router.post('/file', upload.single("filedata"), async (req, res) => {
+    if (req.file == undefined) {
+        res.render('info',{message:"Файл не обрано"})
+        return;
+    }
     let data = fs.readFileSync(path.join('E:/web/diploma/rating/uploads', req.file.filename), 'utf-8')
     data = csvJSON(data);
     
