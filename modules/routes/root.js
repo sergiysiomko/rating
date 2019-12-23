@@ -3,6 +3,7 @@ const router = express.Router();
 const Subjects = require('../db/SubjectsSchema');
 const dataManager = require('../db/DataManager');
 const Comp = require('../computation');
+const passport = require('passport');
 
 router.get('/', async (req, res, next) => {
     //require('../db/datagen/datagen');
@@ -27,7 +28,8 @@ router.get('/', async (req, res, next) => {
             semesters : y.semesters.sort((a,b)=>b-a)
         }
     })
-    res.render('index',{years})
+    
+    res.render('index',{years, auth:req.isAuthenticated()})
 })
 router.get('/student/:card', async (req, res) => {
     const {card} =  req.params;
@@ -49,10 +51,8 @@ router.get('/student/:card', async (req, res) => {
         delete res.stipendAmount
         delete res.freePlace
         return res;
-    })
-    console.log(semesters);
-    //res.send({semesters})
-    res.render('student', {semesters})
+    })    
+    res.render('student', {semesters, auth:req.isAuthenticated()})
 
 })
 router.get('/:year/:semester',async (req,res) => {
@@ -96,7 +96,7 @@ router.get('/:year/:semester',async (req,res) => {
         }
     })
     let href = `${req.params.year}/${req.params.semester}`;
-    res.render('specialities',{faculties, href});
+    res.render('specialities',{faculties, href, auth:req.isAuthenticated()});
 })
 router.get('/:year/:semester/:code', async (req, res) => {
     let registers = await Subjects.find({
@@ -105,7 +105,7 @@ router.get('/:year/:semester/:code', async (req, res) => {
         'speciality.code':parseInt(req.params.code),
     })
     
-    res.render('rating_list', Comp.calcRatingList(registers,42))
+    res.render('rating_list', {...Comp.calcRatingList(registers,42), auth:req.isAuthenticated()})
 })
 router.get('/data',(req,res) => {
     //require('../db/datagen/datagen');

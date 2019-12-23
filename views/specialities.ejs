@@ -1,6 +1,6 @@
-<%-include('parts/header')-%>
+<%-auth?include('parts/auth_header'):include('parts/header')-%>
 
-<div class="container">
+<div class="container font">
 <% faculties.forEach(function(f) {%>
     <h5><%=f.faculty%></h5>
     <ul>

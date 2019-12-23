@@ -4,19 +4,22 @@ const passport = require('passport');
 
 
 router.get('/',passport.isLoggedIn,(req, res) => {
-  res.send(req.user)
+  let {login} = req.user;
+
+  res.render('user', {login})
 })
 
-router.get('/register', function(req, res, next) {
+router.get('/register', passport.isLoggedIn, function(req, res, next) {
   res.render('register')
 });
 router.get('/login', function(req, res, next) {
+  
   res.render('login')
 });
 router.post('/register', passport.authenticate('local-signup', {
   successRedirect : '/', // redirect to the secure profile section
-  failureRedirect : '/register', // redirect back to the signup page if there is an error
-  //failureFlash : true // allow flash messages
+  failureRedirect : '/register', 
+  
 }));
 
 router.post('/login',passport.authenticate('local-login',{

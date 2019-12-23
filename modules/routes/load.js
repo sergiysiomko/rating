@@ -3,16 +3,17 @@ const router = express.Router();
 const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
+const passport = require('passport');
 const Subjects = require('../db/SubjectsSchema');
-
 const upload = multer({dest:"uploads"});
 
 //  /load
 
-router.get('/file', (req, res) => {
-    res.render('load_file');
+router.get('/file', passport.isLoggedIn, (req, res) => {
+   
+    res.render('load_file',{auth:req.isAuthenticated()});
 })
-router.post('/file', upload.single("filedata"), async (req, res) => {
+router.post('/file', passport.isLoggedIn, upload.single("filedata"), async (req, res) => {
     if (req.file == undefined) {
         res.render('info',{message:"Файл не обрано"})
         return;

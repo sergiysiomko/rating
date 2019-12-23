@@ -1,4 +1,4 @@
-<%-include('parts/header')-%>
+<%-auth?include('parts/auth_header'):include('parts/header')-%>
 <div class="container">
 <h3>Рейтинговий список спеціальності "<%=speciality.name%>"</h3>
 <h4>Групи: <%=groups.join(', ')%> - <%=semester%> семестр</h4>

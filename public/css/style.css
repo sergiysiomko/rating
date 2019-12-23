@@ -62,6 +62,11 @@ table .point{
 .table-student{
   width:300px;
 }
+.table-student tr td{
+  padding-top: 7px;
+  padding-bottom: 7px;
+
+}
 .table-student.info{
   margin-top: 20px;
 }
@@ -71,4 +76,20 @@ table .point{
 }
 #line-chart{
   width:200px;
+}
+.logout-btn{
+  margin-top: 30px;
+}
+
+.btn-nav{
+  float: right;
+  margin-top: 15px;
+  margin-right: 8px;
+}
+.btn-nav img{
+  height: 25px;
+  margin-top: 4px;
+}
+.container.font{
+  font-size: 14pt;
 }
